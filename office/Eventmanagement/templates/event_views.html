@@ -1,0 +1,79 @@
+{% extends 'sidebar.html' %}
+
+{% block content %}
+<style>
+#add-event-container { 
+    width: 400px;
+    margin: 20px auto;
+    height: fit-content;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center; /* Center the content */
+}
+
+#add-event-container h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+#add-event-form .form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16PX;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    text-transform: uppercase;  
+}
+.OP{
+   font-size: 15PX;
+   text-transform: uppercase;       
+}
+button[type="submit"] {
+    padding: 10px 20px;
+    margin-top: 20px;
+    background-color: #0c930c;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+</style>
+<div id="add-event-container">
+    {% if message %}
+    <h1>{{ message }}</h1>
+    <a href="{% url 'home' %}"><button type="submit">Back To Home</button></a>
+    {% else %}
+    <h1>Select Event Views Mores</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        
+        <select name="event" id="event">
+            {% for event in events %}
+            <option  class="OP"  value="{{ event }}">{{ event }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <button type="submit">Viwes More</button>
+    </form>
+    {% endif %}
+</div>
+{% endblock content %}

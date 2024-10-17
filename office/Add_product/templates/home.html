@@ -1,0 +1,190 @@
+{% extends 'sidebar.html' %}
+
+{% block content %}
+
+<style>
+    #content-wrapper {
+    display: flex;
+}
+
+#sidebar-content {
+    width: 20%;
+    background-color: #333;
+    color: #fff;
+}
+
+#main-content {
+    width: 80%;
+    padding: 20px;
+}
+.heading-main {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    text-align: center;
+}
+
+/* Style for the form label */
+label {
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+/* Style for the select element */
+select {
+    font-size: 16px;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+/* Style for the submit button */
+button {
+    font-size: 16px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Style for the submit button on hover */
+button:hover {
+    background-color: #0056b3;
+}
+
+
+h1{
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+thead {
+    background-color: #333;
+    color: #fff;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tbody tr:hover {
+    background-color: #ddd;
+}
+.view-details-button {
+        background-color: #007bff; /* Blue background color */
+        color: white; /* White text color */
+        padding: 5px 5px; /* Padding */
+        border: none; /* No border */
+        border-radius: 5px; /* Rounded corners */
+        cursor: pointer; /* Cursor style on hover */
+        font-size: 16px; /* Font size */
+    }
+
+    /* Hover effect */
+    .view-details-button:hover {
+        background-color: #0056b3; /* Darker blue color on hover */
+    }
+    /* Responsive styles for smaller screens */
+@media (max-width: 768px) {
+    #content-wrapper {
+        flex-direction: column;
+    }
+
+    #sidebar-content {
+        width: 100%; /* Occupy full width */
+    }
+
+    #main-content {
+        width: 100%; /* Occupy full width */
+    }
+
+    h1 {
+        text-align: left; /* Align heading to the left */
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+        width: 100%; /* Occupy full width */
+    }
+
+    table {
+        width: 100%; /* Occupy full width */
+    }
+
+    .view-details-button {
+        font-size: 10px; /* Decrease font size for smaller screens */
+        padding: 5px 5px; /* Adjust padding */
+    }
+}
+
+</style>
+    <div id="main-content">
+
+        <div class="heading-main" >
+        <h1 class="home_title">Product Details</h1>
+        <form action="{% url 'home_location' %}" method="POST">
+            {% csrf_token %}
+            <label for="warehouse_location">Choose a warehouse location:</label>
+            <select id="warehouse_location" name="warehouse_location">
+                <option value="" {% if warehouse_location == "" %}selected{% endif %}>Select</option>
+                <option value="Mumbai" {% if warehouse_location == "Mumbai" %}selected{% endif %}>Mumbai</option>
+                <option value="Delhi" {% if warehouse_location == "Delhi" %}selected{% endif %}>Delhi</option>
+                <option value="Bangalore" {% if warehouse_location == "Bangalore" %}selected{% endif %}>Bangalore</option>
+                 <option value="other" {% if warehouse_location == "other" %}selected{% endif %}>other</option>
+            </select>
+            <button type="submit">Views</button>
+        </form>
+    </div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sr.no.</th>
+                        <th>Name</th>
+                        <th>Total Product</th>
+                        <th>In Office Product</th>
+                        <th>Product At Event</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.count }}</td>
+                        <td>{{ product.in_office }}</td>
+                        <td>{{ product.out_office }}</td>
+                        <td>
+                            <form action="{% url 'product_details' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="product_name" value="{{ product.name }}">
+                                <button type="submit" class="view-details-button">View Details</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

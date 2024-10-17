@@ -1,0 +1,278 @@
+{% extends 'sidebar.html' %}
+{% load static %}
+{% block content %}
+    <title>Chalan</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+        }
+        @media print {         
+    body {     
+        margin-top:100px;
+    }
+    #sidebar {
+                display: none;
+            }
+    .container {
+        margin-bottom: -20px;
+        padding: 0;
+    }
+            .print-btn{
+                display: none;
+            }
+
+        .head-name {
+          
+            font-size: 10px;
+
+        }
+
+        .chalan_header {
+        padding: 0;
+    }
+
+    .chalan_address, .chalan_eventname, .table-container, .chalan_footer {
+        margin: 0;
+        padding: 0;
+    }
+    .heading {
+        margin-bottom: 10px;
+    }
+    .company-info, .chalan-info {
+        margin: 0;
+        padding: 0;
+    }
+
+}
+
+.chalan_header{
+            display: flex;
+            gap: 40%;
+            padding-left: 30px;
+            padding-top: 20px;
+            
+        }
+
+        .container {
+            width: 80%;
+            margin: 5%;
+            padding-left: 30px;
+          
+        }
+
+        .heading {
+            text-align: center;
+            font-size: 35px;
+            padding-top: 0px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            height: 100px;
+            width: 150px;
+            object-fit: fill;
+           
+        }
+
+        .chalan-info {
+            float: right;
+            text-align: right;
+            font-size: 18px;
+            font-weight:bold;
+            padding-left: 30px;
+        }
+
+        .chalan_address{
+            display: flex;
+            gap: 50%;
+            margin: 10px;
+            font-size: 18px;
+            font-weight:bold;
+        }
+
+        .company-info {
+            padding-left: 20px;
+            margin-bottom: 10px;
+        }
+
+        .chalan_eventname{
+            font-size: 18px;
+            padding-left:30px ;
+        }
+
+        .to {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .event_location {
+            text-decoration: underline;
+            padding-bottom: 5px;
+        }
+
+        .table-container {
+            margin-bottom: 5px;
+            padding: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 1px;
+            text-align:left;
+
+        }
+
+        th {
+            background-color: #f2f2f2;
+            text-align: center;
+        }
+        .tb-row{
+            text-align: center;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .print-btn {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .print-btn button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .print-btn button:hover {
+            background-color: #0056b3;
+        }
+
+        .chalan_footer{
+            display: flex;
+            justify-content: space-between;
+            padding: 30px 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .serial-td{
+            font-size: 12px;
+        }
+    </style>
+
+    <div class="container">
+        <div class="heading">CHALLAN</div>
+        <div class="chalan_header">
+            <div class="logo">
+                <img src="{% static 'image/groupthinklogo.jpg' %}" alt="Company Logo">
+            </div>
+            <div class="chalan-info">
+                <p>Chalan No: {{ event_details.event_id }}</p>
+            </div>
+        </div>
+        <div class="chalan_address">
+            <div class="company-info">
+                <p>241, Satya Niketan</p>
+                <p>New Delhi -110021</p>
+            </div>
+            <div>
+                <p class="head-date">Date: {{ event_details.event_date }}</p>
+            <p class="head-name">Hardware Team:{{event_details.person_name}}</p>
+            </div>
+        </div>
+        <div class="chalan_eventname">
+            <p class="to">To</p>
+            <p class="event_location">{{ event_details.event_name }}</p>
+            <p class="event_location">{{ event_details.event_location }}</p>
+            <p class="event_location">{{ event_details.event_hotel }}</p>
+        </div>
+        <div class="table-container">
+            <table>
+                <!-- Table header -->
+                <thead>
+                    <tr>
+                        <th >S. No.</th>
+                        <th>Product Name</th>
+                        <th>Count</th>
+                        <th>Serial Number</th>
+                        <th>Remark</th>
+                    </tr>
+                </thead>
+                <!-- Table body -->
+                <tbody>
+                    <!-- Loop through each product -->
+                    {% for product in event_products %}
+                    <tr>
+                        <td class="tb-row">{{ forloop.counter }}</td>
+                         <td class="serial-td"> {% for product_name, configuration in product_configurations.items %}
+                            {% if product_name == product.product_name %}
+                            <p>{{ product_name }}: {{ configuration }}</p>
+                            {% endif %}
+                        {% endfor %}
+                        </td>
+                        <td class="tb-row">{{ product.count }}</td>
+                        <td class="serial-td">
+                            {% for product_name, serial_numbers in product_serial_tuples %}
+                                {% if product_name == product.product_name %}
+                                    {% for serial_number in serial_numbers %}
+                                        <span>{{ serial_number }},</span>&nbsp;
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %} </td>
+                        <td>{{ product.remark }}</td>
+                    </tr>
+                    {% endfor %}
+
+                    {% for temps in tempdata %}
+                    <tr>
+                        <td class="tb-row" id="sum-{{ forloop.counter }}"></td>
+                        <!-- Call JavaScript function inline to calculate and display sum -->
+                        <script>
+                            // Define a function to calculate the sum
+                            function calculateAndDisplaySum(counter, sumValue) {
+                                var sumResult = counter + sumValue;
+                                // Update the content of the corresponding <td> element
+                                document.getElementById('sum-{{ forloop.counter }}').innerText = sumResult;
+                            }
+
+                            // Call the function to calculate and display the sum
+                            calculateAndDisplaySum({{ forloop.counter }}, {{ sum_value }});
+                        </script>
+                        <td  class="serial-td">{{ temps.product_name }}</td>
+                        <td  class="tb-row">{{ temps.count }}</td>
+                        <td   class="serial-td">{{ temps.serial_number }}</td>
+                        <td>{{ temps.remark_note }}</td>
+                    </tr>
+                    {% endfor %}
+                    <!-- Insert blank rows to fill the page -->
+                    {% for _ in blank_rows %}
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="chalan_footer">
+            <div>Customer Signature</div>
+            <div>Authorised Signature</div>
+        </div>
+        <div class="print-btn">
+            <button onclick="window.print()">Print</button>
+        </div>
+    </div>
+{% endblock content %}

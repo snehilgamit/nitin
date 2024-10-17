@@ -1,0 +1,199 @@
+{% extends 'sidebar.html' %}
+{% block content %}
+
+<style>
+#add-product-container {
+    width: 70%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    
+}
+
+.heading-add{
+    text-align: center;
+    padding:10px;
+    margin-bottom: 5%;
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.form-column {
+    width: calc(30% - 10px); /* Adjusted for spacing */
+}
+
+.ststt,
+textarea {
+    font: inherit;
+    font-size: 1rem;
+    line-height: normal;
+    width: 100%;
+    box-sizing: border-box;
+    background: transparent;
+    color: #2d2d2c;
+    position: relative;
+    border: none;
+    border-bottom: 1px solid #20201f;
+    outline: none;
+    padding-top: 15px;
+
+}
+
+
+label {
+    font-weight: bold;
+    text-align: left;
+   
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"] {
+    font: inherit;
+    font-size: 1rem;
+    line-height: normal;
+    width: 100%;
+    box-sizing: border-box;
+    background: transparent;
+    color: #2d2d2c;
+    position: relative;
+    border: none;
+    border-bottom: 1px solid #20201f;
+    outline: none;
+    padding-top: 15px;
+}
+
+.ststt:focus ,
+textarea:focus ,input:focus {
+        border-bottom: 1px solid red;
+    }
+
+
+
+button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+   
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+.error-message {
+    color: red;
+    margin-bottom: 10px;
+    text-align: center;
+    
+}
+</style>
+
+<div id="add-product-container">
+    <h1 class="heading-add">Add Product</h1>
+    <form id="add-product-form" method="post">
+        {% csrf_token %}
+        {% if messages %}
+        <div class="error-message">
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <div class="form-row">
+            <div class="form-column">
+                <label for="name">Product Name:</label>
+                <input type="text" id="name" name="name" required {% if name %} value="{{ name }}" {% endif %}>
+            </div>
+            <div class="form-column">
+                <label for="qr_code">QR Code:</label>
+                <input type="text" id="qr_code" name="qr_code" required {% if qr_code %} value="{{ qr_code }}" {% endif %}>
+            </div>
+            <div class="form-column">
+                <label for="serial_number">Serial Number:</label>
+                <input type="text" id="serial_number" name="serial_number" {% if serial_number %} value="{{ serial_number }}" {% endif %}>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-column">
+                <label for="model">Model:</label>
+                <input type="text" id="model" name="model" {% if model %} value="{{ model }}" {% endif %}>
+            </div>
+            <div class="form-column">
+                <label for="brand_name">Brand Name:</label>
+                <input type="text" id="brand_name" name="brand_name" {% if brand_name %} value="{{ brand_name }}" {% endif %}>
+            </div>
+            <div class="form-column">
+                <label for="buy_date">Buy Date:</label>
+                <input type="date" id="buy_date" name="buy_date" required {% if buy_date %} value="{{ buy_date }}" {% endif %}>
+            </div>
+            
+          <!--  add here -->
+        </div>
+        <div class="form-row">
+          
+            <div class="form-column">
+                <label for="working_status">Working Status:</label>
+                <select id="working_status" name="working_status" class="ststt" required>
+                    <option value="working" {% if working_status == 'working' %} selected {% endif %}>Working</option>
+                    <option value="non_working" {% if working_status == 'non_working' %} selected {% endif %}>Non Working</option>
+                    <option value="missing" {% if working_status == 'missing' %} selected {% endif %}>Missing</option>
+                </select>
+            </div>
+            <div class="form-column">
+                <label for="warehouse_location">Warehouse Location:</label>
+                <select id="warehouse_location" name="warehouse_location" class="ststt" required onchange="handleOtherOption('warehouse_location', 'custom_warehouse_location')">
+                    <option value="Delhi" {% if warehouse_location == 'Delhi' %} selected {% endif %}>Delhi</option>
+                    <option value="Mumbai" {% if warehouse_location == 'Mumbai' %} selected {% endif %}>Mumbai</option>
+                    <option value="Bangalore" {% if warehouse_location == 'Bangalore' %} selected {% endif %}>Bangalore</option>
+                    <option value="other">Other</option>
+                </select>
+                <input type="text" id="custom_warehouse_location" name="custom_warehouse_location" class="ststt" style="display: none;" placeholder="Enter custom warehouse location">
+            </div>
+            
+            <div class="form-column">
+                <label for="office_status">Office Status:</label>
+                <select id="office_status" name="office_status" class="ststt" required onchange="handleOtherOption('office_status', 'custom_office_status')">
+                    <option value="in_office" {% if office_status == 'in_office' %} selected {% endif %}>In Office</option>
+                    <option value="in_event" {% if office_status == 'in_event' %} selected {% endif %}>In Event</option>
+                    <option value="other">Other</option>
+                </select>
+                <input type="text" id="custom_office_status" name="custom_office_status" class="ststt" style="display: none;" placeholder="Enter custom office status">
+            </div>
+            
+        </div>
+        <div class="form-row">
+            <div class="form-column">
+                <label for="configuration">Configuration:</label>
+                <textarea id="configuration" name="configuration" rows="1">{% if configuration %}{{ configuration }}{% endif %}</textarea>
+            </div>
+        </div>
+        <button type="submit">Add Product</button>
+    </form>
+</div>
+
+<script>
+    function handleOtherOption(selectId, customInputId) {
+        var selectBox = document.getElementById(selectId);
+        var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+        var customInput = document.getElementById(customInputId);
+
+        if (selectedValue === "other") {
+            customInput.style.display = "block";
+            customInput.setAttribute("required", "true");
+        } else {
+            customInput.style.display = "none";
+            customInput.removeAttribute("required");
+        }
+    }
+</script>
+{% endblock content %}

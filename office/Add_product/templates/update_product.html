@@ -1,0 +1,241 @@
+{% extends 'sidebar.html' %}
+{% block content %}
+
+<style>
+#add-product-container {
+    width: 70%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+
+}
+
+.heading-add{
+    text-align: center;
+    padding:10px;
+    margin-bottom: 5%;
+}
+
+#add-product-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.form-column {
+    width: calc(30% - 10px); /* Adjusted for spacing */
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.ststt {
+    font: inherit;
+    font-size: 1rem;
+    line-height: normal;
+    width: 100%;
+    box-sizing: border-box;
+    background: transparent;
+    color: #2d2d2c;
+    position: relative;
+    border: none;
+    border-bottom: 1px solid #20201f;
+    outline: none;
+    padding-top: 15px;
+}
+
+label {
+    font-weight: bold;
+    text-align: left;
+}
+input[type="text"],
+input[type="number"],
+input[type="date"],
+textarea {
+    font: inherit;
+    font-size: 1rem;
+    line-height: normal;
+    width: 100%;
+    box-sizing: border-box;
+    background: transparent;
+    color: #2d2d2c;
+    position: relative;
+    border: none;
+    border-bottom: 1px solid #20201f;
+    outline: none;
+    padding-top: 15px;
+}
+
+button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+.error-message {
+    color: red;
+    margin-bottom: 10px;
+}
+
+
+.ststt:focus ,
+textarea:focus ,input:focus {
+        border-bottom: 1px solid red;
+    }
+
+</style>
+
+<div id="add-product-container">
+    <div class="heading-add">
+    <h1>Update Product Details</h1>
+    <h3 >QR Code: {{ product.qr_code }}</h3>
+</div>
+
+    <form id="add-product-form" method="post" action="{% url 'update_product_details' %}">
+        {% csrf_token %}
+        {% if messages %}
+        <div class="error-message">
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <input type="hidden" name="qr_code" value="{{ product.qr_code }}">
+        <div class="form-row">
+            <div class="form-column">
+                <div class="form-group">
+                    <label for="name">Product Name:</label>
+                    <input type="text" id="name" name="name" required value="{{ product.name }}">
+                </div>
+            </div>
+            <div class="form-column">
+                <div class="form-group">
+                    <label for="serial_number">Serial Number:</label>
+                    <input type="text" id="serial_number" name="serial_number" value="{{ product.serial_number }}">
+                </div>
+            </div>
+            <div class="form-column">
+                <div class="form-group">
+                    <label for="model">Model:</label>
+                    <input type="text" id="model" name="model" value="{{ product.model }}">
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-column">
+
+               <div class="form-group">
+                <label for="brand_name">Brand Name:</label>
+                <input type="text" id="brand_name" name="brand_name" value="{{ product.brand_name }}">
+            </div>
+            </div>
+            <div class="form-column">
+                <div class="form-group">
+                    <label for="warehouse_location">Warehouse Location:</label>
+                    <select id="warehouse_location" name="warehouse_location" class="form-control ststt" required onchange="handleOtherOption('warehouse_location', 'custom_warehouse_location')">
+                        <option value="Delhi" {% if product.warehouse_location == 'Delhi' %} selected {% endif %}>Delhi</option>
+                        <option value="Mumbai" {% if product.warehouse_location == 'Mumbai' %} selected {% endif %}>Mumbai</option>
+                        <option value="Bangalore" {% if product.warehouse_location == 'Bangalore' %} selected {% endif %}>Bangalore</option>
+                        
+                        <option value="other"  {% if product.warehouse_location != 'Delhi' and product.warehouse_location != 'Mumbai' and product.warehouse_location != 'Bangalore' %} selected {% endif %}>Other</option>
+                    </select>
+                    <input type="text" id="custom_warehouse_location" name="custom_warehouse_location" class="ststt"  placeholder="Enter custom warehouse location" value="{{ product.warehouse_location }}">
+                </div>
+            </div>
+            <div class="form-column">
+                <div class="form-group">
+                    <label for="working_status">Working Status:</label>
+                    <select id="working_status" name="working_status" class="form-control ststt" required>
+                        <option value="working" {% if product.working_status == 'working' %} selected {% endif %}>Working</option>
+                        <option value="non_working" {% if product.working_status == 'non_working' %} selected {% endif %}>Non Working</option>
+                        <option value="missing" {% if product.working_status == 'missing' %} selected {% endif %}>Missing</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+
+            <!-- <div class="form-column">
+                <div class="form-group">
+                    <label for="office_status">Office Status:</label>
+                    <select id="office_status" name="office_status" class="form-control ststt" required>
+                        <option value="in_office" {% if product.office_status == 'in_office' %} selected {% endif %}>In Office</option>
+                        <option value="in_event" {% if product.office_status == 'in_event' %} selected {% endif %}>In Event</option>
+                        <option value="other" {% if product.office_status != "in_office" %} selected {% endif %}>Other</option>
+                    </select>
+                    <input type="text" id="custom_office_status" name="custom_office_status" class="ststt" style="display: none;" placeholder="Enter custom office status">
+                </div> -->
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="office_status">Office Status:</label>
+                        <select id="office_status" name="office_status" class="form-control ststt" required onchange="handleOfficeStatusChange('office_status', 'custom_office_status')">
+                            <option value="in_office" {% if product.office_status == 'in_office' %} selected {% endif %}>In Office</option>
+                            <option value="in_event" {% if product.office_status == 'in_event' %} selected {% endif %}>In Event</option>
+                            <option value="other" {% if product.office_status != 'in_office' and product.office_status != 'in_event' %} selected {% endif %}>Other</option>
+                        </select>
+                        <input type="text" id="custom_office_status" name="custom_office_status" class="ststt"  value="{{product.office_status}}" placeholder="Enter custom office status">
+                    </div>
+
+            </div>
+            <div class="form-group">
+                <label for="configuration">Configuration:</label>
+                <textarea id="configuration" name="configuration" rows="3">{{ product.configuration }}</textarea>
+            </div>
+        </div>
+        <button type="submit">Update Product</button>
+    </form>
+</div>
+
+<script>
+    function handleOtherOption(selectId, customInputId) {
+        var selectBox = document.getElementById(selectId);
+        var customInput = document.getElementById(customInputId);
+
+        selectBox.addEventListener('change', function() {
+            var selectedValue = selectBox.value;
+
+            if (selectedValue === "other") {
+                customInput.style.display = "block";
+                customInput.setAttribute("required", "true");
+            } else {
+                customInput.style.display = "none";
+                customInput.removeAttribute("required");
+            }
+        });
+
+        // Initialize state based on initial value
+        var initialValue = selectBox.value;
+        if (initialValue === "other") {
+            customInput.style.display = "block";
+            customInput.setAttribute("required", "true");
+        } else {
+            customInput.style.display = "none";
+            customInput.removeAttribute("required");
+        }
+    }
+
+    // Call the function for Warehouse Location field
+    document.addEventListener('DOMContentLoaded', function() {
+
+        handleOtherOption('warehouse_location', 'custom_warehouse_location');
+        handleOtherOption('office_status', 'custom_office_status');
+    });
+</script>
+
+{% endblock content %}
+

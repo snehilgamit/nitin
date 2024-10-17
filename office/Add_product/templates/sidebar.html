@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <title>OFFICE PRODUCT MANAGEMENT</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        #wrapper {
+            min-height: 100vh;
+            display: flex;
+
+        }
+        #sidebar {
+            background-color: #333;
+            color: #fff;
+            width: 230px;
+            padding: 0;
+        }
+
+        #sidebar ul {
+            list-style: none;
+            padding: 1px;
+            padding-top: 10px;
+            margin-left: 10px;
+            position: fixed;
+            min-height: 100vh;
+        }
+
+        #sidebar a {
+            text-decoration: none;
+            color: #fff;
+            display: block;
+            padding: 10px;
+            transition: background-color 0.3s;
+        }
+        #sidebar a:hover {
+            background-color: #555;
+        }
+
+
+
+        /* Responsive styles for smaller screens */
+        @media (max-width: 768px) {
+    #wrapper {
+        flex-direction: column;
+    }
+
+    #sidebar {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    #sidebar ul {
+        margin-left: 0; /* Remove left margin for smaller screens */
+    }
+
+    #sidebar a {
+        padding: 10px 20px; /* Increase padding for better touch interaction */
+    }
+}
+    </style>
+</head>
+
+<body>
+    {% block sidebarContent %}
+    <div id="wrapper" class="d-flex">
+        <div id="sidebar">
+            <ul class="list-unstyled ">
+
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'add_product'%}">Add  Product</a></li>
+                <li><a href="{% url 'AddeventDetails' %}">Take Product to Event</a></li>
+                <li><a href="{% url 'return_product_views'%}">Take Product to Office</a></li>
+                <li><a href="{% url 'product_details'%}">Product Details By Name</a></li>
+                <li><a href="{% url 'event_selection_view' %}">Challan Print</a></li>
+                <li><a href="{% url 'event_views_active' %}">Views Active Event </a></li>
+                <li><a href="{% url 'event_views' %}">Views Event</a></li>
+                <li><a href="{% url 'qr_code_input' %}">See Single Product</a></li>
+                <li><a href="{% url 'export_excel' %}">Export To Excel </a></li>
+                 <li><a href="{% url 'upload_products' %}">Upload file  </a></li>
+                <li><a href="{% url 'my_logout_view' %}">Logout</a></li>
+
+            </ul>
+        </div>
+
+        {% endblock sidebarContent %}
+
+        <!-- Page Content -->
+        {% block content %}
+
+
+    {% endblock content %}
+
+</div>
+
+</body>
+
+</html>

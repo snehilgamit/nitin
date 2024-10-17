@@ -1,0 +1,131 @@
+{% extends 'sidebar.html' %}
+{% block content %}
+
+
+<style>
+    #container {
+        width: 400px;
+        margin: 20px auto;
+        height: fit-content;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-align: center;
+        margin-top: 0px;
+    }
+
+    .details {
+        width: 80%;
+        margin: 0 auto 20px;
+        text-align: left;
+    }
+
+    #event-product-form {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        margin-bottom: 15px;
+    }
+
+    button[type="submit"] {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    margin: 20px;
+    border: none;
+}
+button:hover{
+    background-color: #0056b3;
+}
+    .url-box{
+        display: flex;
+
+    }
+</style>
+
+<div id="container">
+
+    <div id="event-product-form">
+        <h1>Event Details</h1>
+        <div class="details">
+            <p><strong class="event-name">Event Id:</strong> {{ event_details.event_id }}</p>
+            <p><strong class="event-name">Event Name:</strong> {{ event_details.event_name }}</p>
+            <p><strong class="event-location">Event Location:</strong> {{ event_details.event_location }}</p>
+            <p><strong class="event-date">Event Date:</strong> {{ event_details.event_date }}</p>
+            <p><strong class="person_name">Person Name:</strong> {{ event_details.person_name }}</p>
+            <p><strong class="warehouse-location">Warehouse Location:</strong> {{ event_details.warehouse_location }}
+            </p>
+        </div>
+
+        <h2>Enter Temporary Product </h2>
+        <form method="post">
+            {% csrf_token %}
+
+            <label for="product_name">Product Name:</label>
+            <input type="text" id="product_name" name="product_name" required>
+
+            <label for="count">Count:</label>
+            <input type="text" id="count" name="count" required>
+
+            <label for="serial_number">Serial Number:</label>
+            <input type="text" id="serial_number" name="serial_number">
+
+            <label for="remark_note">Remark Note:</label>
+            <input type="text" id="remark_note" name="remark_note">
+
+            <button type="submit">Submit</button>
+        </form>
+<div class="url-box">
+        <form action="{% url 'event_selection_view' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="event" value="{{ event_details.event_name }}">
+            <button type="submit" class="view-details-button">Print Chalan</button>
+        </form>
+
+        <a href="{% url 'enter_product_details' event_id=event_details.event_id %}" ><button>Add More Product</button></a>
+    </div>
+    </div>
+</div>
+{% endblock content %}

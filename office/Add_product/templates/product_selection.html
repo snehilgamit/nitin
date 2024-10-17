@@ -1,0 +1,80 @@
+{% extends 'sidebar.html' %}
+
+{% block content %}
+<style>
+    /* Container styling */
+    #select-product-container {
+        width: 400px;
+        margin: 20px auto;
+        padding: 20px;
+        height: fit-content;
+        background-color: #f9f9f9;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    /* Heading styling */
+    #select-product-container h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    /* Form group styling */
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    /* Label styling */
+    label {
+        display: block;
+        font-weight: bold;
+        font-size: 18px;
+    }
+
+    /* Select input styling */
+    select {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        text-transform: uppercase;
+    }
+
+    /* Button styling */
+    button[type="submit"] {
+        padding: 10px 20px;
+        margin-top: 20px;
+        background-color: #0c930c;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    /* Button hover effect */
+    button[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+</style>
+
+<div id="select-product-container">
+    <h1>Select a Product</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="product_name">Product Name:</label>
+            <select name="product_name" id="product_name">
+                {% for product_name in all_product_names %}
+                <option value="{{ product_name }}">{{ product_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit">View Details</button>
+    </form>
+</div>
+{% endblock content %}

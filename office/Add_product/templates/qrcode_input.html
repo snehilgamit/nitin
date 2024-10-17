@@ -1,0 +1,133 @@
+{% extends 'sidebar.html' %}
+{% block content %}
+<style>
+    /* Container styling */
+    #select-product-container {
+        width: 400px;
+        margin: 20px auto;
+        height: fit-content;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    /* Heading styling */
+    #select-product-container h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+    .error-message {
+        color: red;
+        margin-bottom: 10px;
+    }
+
+    /* Form group styling */
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    /* Label styling */
+    label {
+        display: block;
+        font-weight: bold;
+        font-size: 18px;
+    }
+
+    /* Input styling */
+    #qr_code {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        text-transform: uppercase;
+    }
+
+    /* Button styling */
+    button[type="submit"] {
+        padding: 10px 20px;
+        margin-top: 20px;
+        background-color: #0c930c;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    /* Button hover effect */
+    button[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+    /* Product details container */
+
+    #product-details-container {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-align: left;
+    }
+
+    /* Heading styling */
+    #product-details-container h2 {
+        font-size: 20px;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    /* Product details item styling */
+    #product-details-container p {
+        font-size: 16px;
+        margin-bottom: 5px;
+    }
+
+    /* Label styling */
+    #product-details-container p strong {
+        font-weight: bold;
+    }
+</style>
+
+<div id="select-product-container">
+    <h1>Enter Product QR Code</h1>
+    {% if message %}
+    <div class="error-message">
+        <p>{{ message }}</p>
+    </div>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" id="qr_code" name="qr_code" placeholder="Enter QR Code or Serial Number" required {% if product %} value="{{ product.qr_code }}" {% endif %}>
+        <button type="submit">View Details</button>
+    </form>
+
+    {% if product %}
+    <div id="product-details-container">
+        <h2>Product Details</h2>
+        <p>Name: {{ product.name }}</p>
+        <p>QR Code: {{ product.qr_code }}</p>
+        <p>Serial Number: {{ product.serial_number }}</p>
+        <p>Model: {{ product.model }}</p>
+        <p>Configuration: {{ product.configuration }}</p>
+        <p>Working Status: {{ product.working_status }}</p>
+        <p>Warehouse Location: {{ product.warehouse_location }}</p>
+        <p>Buy Date: {{ product.buy_date }}</p>
+        <p>Brand Name: {{ product.brand_name }}</p>
+        <p>Office Status: {{ product.office_status }}</p>
+        {% if product.event_name  %}
+        <p>Event Name: {{ product.event_name }}</p>
+        {% endif %}
+        <form action="{% url 'update_product' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="qr_code" value="{{ product.qr_code }}">
+            <button type="submit" class="view-details-button">Edit</button>
+        </form>
+    </div>
+    {% endif %}
+</div>
+{% endblock content %}

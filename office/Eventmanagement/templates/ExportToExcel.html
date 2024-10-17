@@ -1,0 +1,76 @@
+{% extends 'sidebar.html' %}
+{% block content %}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+    }
+
+    .container {
+        width: 400px;
+        height: fit-content;
+        margin: 0 auto;
+        padding: 20px;
+        margin-top: 10px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    form {
+        text-align: center;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    button[type="submit"] {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<div class="container">
+    <h1>Export Data to Excel</h1>
+    <form action="{% url 'export_excel' %}" method="post">
+        {% csrf_token %}
+        <label for="model">Select Model:</label>
+        <select name="model" id="model">
+            <option value="Product">Product</option>
+            <option value="EventDetails">Event Details</option>
+            <option value="EventProduct">Event Product</option>
+        </select>
+        <button type="submit">Export to Excel</button>
+    </form>
+</div>
+
+{% endblock content %}
