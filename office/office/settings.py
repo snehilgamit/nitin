@@ -26,6 +26,12 @@ SECRET_KEY = 'django-insecure-xold@y*e(q)5xlp!mz&d=0+0m17@4a0f%35wnh6$=kp(2aij(6
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
+CSRF_TRUSTED_ORIGINS = [
+    'https://nitin-production.up.railway.app',
+    'https://www.nitin-production.up.railway.app',  # Include www if applicable
+]
+CSRF_COOKIE_SAMESITE = 'None'  # For cross-origin requests
+CSRF_COOKIE_SECURE = True  # Ensure this is True if using HTTPS
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
