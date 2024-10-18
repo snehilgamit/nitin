@@ -20,7 +20,7 @@ def login_view(request):
 
         if user is not None:
             # User is authenticated
-            login(request, user)
+            data = login(request, user)
             # Redirect to a success page or home page
             return redirect('home')
         else:
